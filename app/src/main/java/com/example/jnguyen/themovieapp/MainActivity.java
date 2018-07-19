@@ -1,6 +1,8 @@
 package com.example.jnguyen.themovieapp;
 
+import android.content.ContentValues;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -16,12 +18,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.jnguyen.themovieapp.Utilities.NetworkUtils;
+import com.example.jnguyen.themovieapp.Utilities.TheMovieDbJSONUtils;
+
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<String> {
+        LoaderManager.LoaderCallbacks<ContentValues[]>  {
 
     private static final int MOVIE_SEARCH_LOADER = 69;
     private static final String SEARCH_QUERY_URL_EXTRA = "query";
@@ -84,22 +89,16 @@ public class MainActivity extends AppCompatActivity implements
         mSearchQueryResult.setVisibility(View.VISIBLE);
     }
 
-    /**
-     * This method will make the error message visible and hide the JSON
-     * View.
-     * <p>
-     * Since it is okay to redundantly set the visibility of a View, we don't
-     * need to check whether each view is currently visible or invisible.
-     */
     private void showErrorMessage() {
         mSearchQueryResult.setVisibility(View.INVISIBLE);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public Loader<String> onCreateLoader(int id, final Bundle args) {
-        return new AsyncTaskLoader<String>(this) {
-            String jsonResult;
+    public Loader<ContentValues[]> onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader<ContentValues[]>(this) {
+            ContentValues[] jsonResult;
+
             @Override
             protected void onStartLoading() {
                 if(args == null){
@@ -115,8 +114,9 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             @Override
-            public String loadInBackground() {
+            public ContentValues[] loadInBackground() {
                 String searchQueryUrl = args.getString(SEARCH_QUERY_URL_EXTRA);
+                Log.d("url",searchQueryUrl);
 
                 if(searchQueryUrl == null || TextUtils.isEmpty(searchQueryUrl)) {
                     return null;
@@ -126,15 +126,27 @@ public class MainActivity extends AppCompatActivity implements
                     URL url = new URL(searchQueryUrl);
                     String searchQueryResults = NetworkUtils.getResponseFromHttpUrl(url);
                     Log.d("json",searchQueryResults);
-                    return searchQueryResults;
+
+                    try {
+                        jsonResult = TheMovieDbJSONUtils.getMoviesContentValuesFromJson(searchQueryResults);
+                        //for (ContentValues value : contentValues){
+                        //    Log.d("movie", value.get("title").toString());
+                        //}
+                    } catch (JSONException e){
+
+                        e.printStackTrace();
+                    }
+
+
                 } catch (IOException e ){
                     e.printStackTrace();
                     return null;
                 }
+                return jsonResult;
             }
 
             @Override
-            public void deliverResult(String data) {
+            public void deliverResult(ContentValues[] data) {
                 jsonResult = data;
                 super.deliverResult(data);
             }
@@ -142,18 +154,28 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onLoadFinished(Loader<String> loader, String data) {
+    public void onLoadFinished(@NonNull Loader<ContentValues[]> loader, ContentValues[] data) {
         mLoadingIndicator.setVisibility(View.INVISIBLE);
         if(data == null){
             showErrorMessage();
         } else {
-            mSearchQueryResult.setText(data);
+            //mSearchQueryResult.setText(data);
             showJsonDataView();
         }
     }
 
+//        try {
+//            ContentValues[] contentValues = TheMovieDbJSONUtils.getMoviesContentValuesFromJson(this, data);
+//            for (ContentValues value : contentValues){
+//                Log.d("movie", value.get("title").toString());
+//            }
+//
+//        } catch (JSONException e){
+//            e.printStackTrace();
+//        }
+
     @Override
-    public void onLoaderReset(Loader<String> loader) {
+    public void onLoaderReset(Loader<ContentValues[]> loader) {
 
     }
 

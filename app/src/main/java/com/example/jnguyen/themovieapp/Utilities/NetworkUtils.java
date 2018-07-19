@@ -9,7 +9,7 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class NetworkUtils {
-
+    //http://image.tmdb.org/t/p/ + path
     private final static String AUTHENTICATION_KEY = "e5c29049ee97d4ff4783f528930be86e";
     final static String SEARCH_BASE_QUERY_URL = "https://api.themoviedb.org/3/search/movie";
     final static String PARAM_API_KEY = "api_key";
