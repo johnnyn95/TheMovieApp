@@ -2,11 +2,9 @@ package com.example.jnguyen.themovieapp;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.graphics.Movie;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +14,6 @@ import android.widget.TextView;
 import com.example.jnguyen.themovieapp.Utilities.NetworkUtils;
 import com.example.jnguyen.themovieapp.Utilities.TheMovieDbJSONUtils;
 import com.squareup.picasso.Picasso;
-
-import java.net.URL;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdapterViewHolder> {
     private final Context mContext;
@@ -36,19 +32,15 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     @Override
     public void onBindViewHolder(@NonNull MoviesAdapter.MoviesAdapterViewHolder holder, int position) {
         holder.movieTitle.setText(mContentValues[position].get(TheMovieDbJSONUtils.getMovieTitleKey()).toString());
-        holder.movieScore.setText(mContentValues[position].get(TheMovieDbJSONUtils.getMovieScoreKey()).toString());
+        holder.movieScore.setText("Score: " + mContentValues[position].get(TheMovieDbJSONUtils.getMovieScoreKey()).toString());
         String imagePath = mContentValues[position].get(TheMovieDbJSONUtils.getMovieImagePathKey()).toString();
-
         Uri imgUri = NetworkUtils.buildImageUri(imagePath);
         Picasso.get().load(imgUri).into(holder.movieImage);
-        Log.d("imagePath",imagePath);
-        Log.d("uri",imgUri.toString());
-        //Picasso.get().load(R.drawable.ic_launcher_background).into(holder.movieImage);
     }
 
     @Override
     public int getItemCount() {
-        return 5;//mContentValues.length;
+        return mContentValues.length;
     }
 
     public class MoviesAdapterViewHolder extends RecyclerView.ViewHolder {
@@ -62,8 +54,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
             movieScore = view.findViewById(R.id.tv_movieScore);
             movieImage = view.findViewById(R.id.iv_movieImage);
         }
-    }
-    public void setNewData(ContentValues[] contentValues){
-        mContentValues = contentValues;
+
     }
 }

@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/et_search_box"
@@ -16,35 +15,29 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:hint="Enter a query, then click Search"
+        android:hint="@string/query_hint"
+        android:paddingBottom="16dp"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_url_display"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Click search and your URL will show up here!"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="@+id/et_search_box"
-        app:layout_constraintStart_toStartOf="@+id/et_search_box"
-        app:layout_constraintTop_toBottomOf="@+id/et_search_box" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_movies_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="4dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="@+id/tv_url_display"
-        app:layout_constraintStart_toStartOf="@+id/tv_url_display"
-        app:layout_constraintTop_toTopOf="@+id/pb_loading_indicator"></android.support.v7.widget.RecyclerView>
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/et_search_box"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/et_search_box"
+        app:layout_constraintTop_toBottomOf="@+id/et_search_box"
+        app:layout_constraintVertical_bias="0.0"></android.support.v7.widget.RecyclerView>
 
     <TextView
         android:id="@+id/tv_error_message_display"
@@ -54,14 +47,14 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:padding="16dp"
-        android:text="Error"
+        android:text="@string/error_message"
         android:textSize="22sp"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@+id/rv_movies_list"
-        app:layout_constraintStart_toStartOf="@+id/rv_movies_list"
-        app:layout_constraintTop_toBottomOf="@+id/rv_movies_list" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_search_box" />
 
     <ProgressBar
         android:id="@+id/pb_loading_indicator"
@@ -74,8 +67,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@+id/tv_url_display"
-        app:layout_constraintStart_toStartOf="@+id/tv_url_display"
-        app:layout_constraintTop_toBottomOf="@+id/tv_url_display" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_search_box" />
 
 </android.support.constraint.ConstraintLayout>

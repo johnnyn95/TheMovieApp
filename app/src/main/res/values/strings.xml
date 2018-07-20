@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">TheMovieApp</string>
     <string name="search">Search</string>
+    <string name="error_message">Sorry,no results found :(</string>
+    <string name="query_hint">Enter a movie Title</string>
+    <string name="score">Score: </string>
 </resources>

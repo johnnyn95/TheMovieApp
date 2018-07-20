@@ -12,15 +12,14 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.jnguyen.themovieapp.Utilities.NetworkUtils;
+import com.example.jnguyen.themovieapp.Utilities.PageManager;
 import com.example.jnguyen.themovieapp.Utilities.TheMovieDbJSONUtils;
 
 import org.json.JSONException;
@@ -35,14 +34,12 @@ public class MainActivity extends AppCompatActivity implements
     private static final String SEARCH_QUERY_URL_EXTRA = "query";
 
     EditText mSearchQuery;
-    TextView mSearchQueryUrl;
-    TextView mSearchQueryResult;
-
     TextView mErrorMessageDisplay;
     ProgressBar mLoadingIndicator;
     RecyclerView mMoviesList;
 
     ContentValues[] moviesList;
+    String searchQueryUrl;
 
     MoviesAdapter mMoviesAdapter;
 
@@ -52,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         mSearchQuery =  findViewById(R.id.et_search_box);
-        mSearchQueryUrl = findViewById(R.id.tv_url_display);
 
         mErrorMessageDisplay = findViewById(R.id.tv_error_message_display);
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
@@ -61,27 +57,21 @@ public class MainActivity extends AppCompatActivity implements
 
 
         if(savedInstanceState != null){
-            String queryUrl = savedInstanceState.getString(SEARCH_QUERY_URL_EXTRA);
-            mSearchQueryUrl.setText(queryUrl);
+            searchQueryUrl = savedInstanceState.getString(SEARCH_QUERY_URL_EXTRA);
         }
 
         getSupportLoaderManager().initLoader(MOVIE_SEARCH_LOADER,null, this);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         mMoviesList.setLayoutManager(linearLayoutManager);
-
-
     }
 
     public void makeMovieSearchQuery(){
         String searchQuery = mSearchQuery.getText().toString();
         if(TextUtils.isEmpty(searchQuery)){
-            mSearchQueryUrl.setText("No query entered, nothing to search for.");
             return;
         }
         URL searchQueryUrl = NetworkUtils.buildSearchQueryUrl(searchQuery);
-
-        mSearchQueryUrl.setText(searchQueryUrl.toString());
 
         Bundle queryBundle = new Bundle();
         queryBundle.putString(SEARCH_QUERY_URL_EXTRA,searchQueryUrl.toString());
@@ -139,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements
 
                     try {
                         jsonResult = TheMovieDbJSONUtils.getMoviesContentValuesFromJson(searchQueryResults);
+
                         //for (ContentValues value : contentValues){
                         //    Log.d("movie", value.get("title").toString());
                         //}
@@ -169,29 +160,13 @@ public class MainActivity extends AppCompatActivity implements
         if(data == null){
             showErrorMessage();
         } else {
-            //mSearchQueryResult.setText(data);
             moviesList = data;
             mMoviesAdapter = new MoviesAdapter(this,moviesList);
             mMoviesList.setHasFixedSize(true);
             mMoviesList.setAdapter(mMoviesAdapter);
-            //mMoviesAdapter.setNewData(data);
-            for(ContentValues value : data){
-                Log.d("data",value.toString());
-            }
-
             hideErrorMessage();
         }
     }
-
-//        try {
-//            ContentValues[] contentValues = TheMovieDbJSONUtils.getMoviesContentValuesFromJson(this, data);
-//            for (ContentValues value : contentValues){
-//                Log.d("movie", value.get("title").toString());
-//            }
-//
-//        } catch (JSONException e){
-//            e.printStackTrace();
-//        }
 
     @Override
     public void onLoaderReset(Loader<ContentValues[]> loader) {
@@ -217,9 +192,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        String queryUrl = mSearchQueryUrl.getText().toString();
-        outState.putString(SEARCH_QUERY_URL_EXTRA,queryUrl);
+        outState.putString(SEARCH_QUERY_URL_EXTRA,searchQueryUrl);
     }
 
 }

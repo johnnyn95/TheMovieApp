@@ -11,6 +11,7 @@ public class TheMovieDbJSONUtils {
 
     private static final String RESULTS = "results";
     private static final String RESULTS_COUNT = "total_results";
+    private static final String PAGES_COUNT = "total_pages";
     private static final String MOVIE_TITLE = "title";
     private static final String MOVIE_SCORE = "vote_average";
     private static final String MOVIE_IMAGE_PATH = "poster_path";
@@ -29,9 +30,9 @@ public class TheMovieDbJSONUtils {
             throws JSONException {
         JSONObject moviesJson = new JSONObject(jsonResult);
 
-        //if(moviesJson.has(RESULTS_COUNT) && moviesJson.getInt(RESULTS_COUNT) == 0){
-        //    //no results found
-        //}
+        if(moviesJson.has(RESULTS_COUNT) && moviesJson.getInt(RESULTS_COUNT) == 0){
+            return null;
+        }
         JSONArray moviesJsonArray = moviesJson.getJSONArray(RESULTS);
         ContentValues[] movieContentValues = new ContentValues[moviesJsonArray.length()];
 
@@ -49,5 +50,10 @@ public class TheMovieDbJSONUtils {
             movieContentValues[i] = movieValues;
         }
         return movieContentValues;
+    }
+
+    public static int getMoviesQueryPageCount(String jsonResult)throws JSONException {
+        JSONObject moviesJson = new JSONObject(jsonResult);
+        return moviesJson.getInt(PAGES_COUNT);
     }
 }
