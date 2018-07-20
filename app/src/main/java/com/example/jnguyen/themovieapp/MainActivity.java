@@ -7,6 +7,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -14,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -37,6 +40,11 @@ public class MainActivity extends AppCompatActivity implements
 
     TextView mErrorMessageDisplay;
     ProgressBar mLoadingIndicator;
+    RecyclerView mMoviesList;
+
+    ContentValues[] moviesList;
+
+    MoviesAdapter mMoviesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +52,12 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         mSearchQuery =  findViewById(R.id.et_search_box);
-
         mSearchQueryUrl = findViewById(R.id.tv_url_display);
-        mSearchQueryResult =  findViewById(R.id.tv_movie_search_results_json);
 
         mErrorMessageDisplay = findViewById(R.id.tv_error_message_display);
-
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
+        mMoviesList = findViewById(R.id.rv_movies_list);
+
 
 
         if(savedInstanceState != null){
@@ -59,6 +66,11 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         getSupportLoaderManager().initLoader(MOVIE_SEARCH_LOADER,null, this);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        mMoviesList.setLayoutManager(linearLayoutManager);
+
+
     }
 
     public void makeMovieSearchQuery(){
@@ -84,13 +96,11 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void showJsonDataView() {
+    private void hideErrorMessage() {
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
-        mSearchQueryResult.setVisibility(View.VISIBLE);
     }
 
     private void showErrorMessage() {
-        mSearchQueryResult.setVisibility(View.INVISIBLE);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
@@ -160,7 +170,16 @@ public class MainActivity extends AppCompatActivity implements
             showErrorMessage();
         } else {
             //mSearchQueryResult.setText(data);
-            showJsonDataView();
+            moviesList = data;
+            mMoviesAdapter = new MoviesAdapter(this,moviesList);
+            mMoviesList.setHasFixedSize(true);
+            mMoviesList.setAdapter(mMoviesAdapter);
+            //mMoviesAdapter.setNewData(data);
+            for(ContentValues value : data){
+                Log.d("data",value.toString());
+            }
+
+            hideErrorMessage();
         }
     }
 
