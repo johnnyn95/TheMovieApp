@@ -21,6 +21,7 @@ public class SettingsActivity extends AppCompatActivity  implements SharedPrefer
             setupThemeSharedPreferences();
         }
         recreate();
+
     }
 
     public void setupThemeSharedPreferences(){
