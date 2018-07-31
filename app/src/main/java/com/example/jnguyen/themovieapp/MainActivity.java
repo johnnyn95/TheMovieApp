@@ -1,9 +1,15 @@
 package com.example.jnguyen.themovieapp;
 
+import android.Manifest;
+import android.app.Application;
 import android.content.ContentValues;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -28,7 +34,7 @@ import java.io.IOException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<ContentValues[]>  {
+        LoaderManager.LoaderCallbacks<ContentValues[]> , SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int MOVIE_SEARCH_LOADER = 69;
     private static final String SEARCH_QUERY_URL_EXTRA = "query";
@@ -46,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setupThemeSharedPreferences();
+
         setContentView(R.layout.activity_main);
 
         mSearchQuery =  findViewById(R.id.et_search_box);
@@ -64,6 +73,24 @@ public class MainActivity extends AppCompatActivity implements
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         mMoviesList.setLayoutManager(linearLayoutManager);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    public void setupThemeSharedPreferences(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if(sharedPreferences.getString(getString(R.string.pref_theme_key),getString(R.string.pref_theme_light_value)) == getString(R.string.pref_theme_light_value)){
+            Log.d("theme","light");
+            this.setTheme(R.style.AppTheme);
+        } else {
+            Log.d("theme","dark");
+            this.setTheme(R.style.TheMovieDbDark);
+        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     public void makeMovieSearchQuery(){
@@ -86,6 +113,11 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    public void launchSettingsActivity(){
+        Intent settingsIntent = new Intent(this,SettingsActivity.class);
+        startActivity(settingsIntent);
+    }
+
     private void hideErrorMessage() {
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
     }
@@ -105,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements
                     return;
                 }
                 mLoadingIndicator.setVisibility(View.VISIBLE);
-
+                mMoviesList.setVisibility(View.INVISIBLE);
                 if(jsonResult != null){
                     deliverResult(jsonResult);
                 } else {
@@ -157,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(@NonNull Loader<ContentValues[]> loader, ContentValues[] data) {
         mLoadingIndicator.setVisibility(View.INVISIBLE);
+        mMoviesList.setVisibility(View.VISIBLE);
         if(data == null){
             showErrorMessage();
         } else {
@@ -182,9 +215,13 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_search) {
-            makeMovieSearchQuery();
-            return true;
+        switch (id){
+            case R.id.action_search :
+                makeMovieSearchQuery();
+                return true;
+            case R.id.action_settings :
+                launchSettingsActivity();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -195,5 +232,12 @@ public class MainActivity extends AppCompatActivity implements
         outState.putString(SEARCH_QUERY_URL_EXTRA,searchQueryUrl);
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals(R.string.pref_theme_key)){
+            setupThemeSharedPreferences();
+        }
+        recreate();
+    }
 }
 
