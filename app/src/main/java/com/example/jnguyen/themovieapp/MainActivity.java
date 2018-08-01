@@ -34,7 +34,8 @@ import java.io.IOException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<ContentValues[]> , SharedPreferences.OnSharedPreferenceChangeListener {
+        LoaderManager.LoaderCallbacks<ContentValues[]> ,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int MOVIE_SEARCH_LOADER = 69;
     private static final String SEARCH_QUERY_URL_EXTRA = "query";
@@ -51,10 +52,10 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        setupThemeSharedPreferences(sharedPreferences);
         super.onCreate(savedInstanceState);
-
-        setupThemeSharedPreferences();
-
         setContentView(R.layout.activity_main);
 
         mSearchQuery =  findViewById(R.id.et_search_box);
@@ -81,16 +82,21 @@ public class MainActivity extends AppCompatActivity implements
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
     }
 
-    public void setupThemeSharedPreferences(){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    public void setupThemeSharedPreferences(SharedPreferences sharedPreferences){
+        this.setTheme(getSharedPreferenceTheme(sharedPreferences));
+    }
+
+    public int getSharedPreferenceTheme(SharedPreferences sharedPreferences){
+        int theme = 0;
         if(sharedPreferences.getString(getString(R.string.pref_theme_key),getString(R.string.pref_theme_light_value)) == getString(R.string.pref_theme_light_value)){
-            Log.d("theme","light");
-            this.setTheme(R.style.AppTheme);
-        } else {
-            Log.d("theme","dark");
-            this.setTheme(R.style.TheMovieDbDark);
+            theme = R.style.AppTheme;
+            Log.d("theme","is light");
         }
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        if(sharedPreferences.getString(getString(R.string.pref_theme_key),getString(R.string.pref_theme_light_value)) == getString(R.string.pref_theme_dark_value)){
+            theme = R.style.TheMovieDbDark;
+            Log.d("theme","is dark");
+        }
+        return theme;
     }
 
     public void makeMovieSearchQuery(){
@@ -235,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if(key.equals(R.string.pref_theme_key)){
-            setupThemeSharedPreferences();
+            setupThemeSharedPreferences(sharedPreferences);
         }
         recreate();
     }

@@ -16,6 +16,13 @@ public class SettingsActivity extends AppCompatActivity  implements SharedPrefer
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if(key.equals(R.string.pref_theme_key)){
             setupThemeSharedPreferences();
@@ -26,13 +33,18 @@ public class SettingsActivity extends AppCompatActivity  implements SharedPrefer
 
     public void setupThemeSharedPreferences(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if(sharedPreferences.getString(getString(R.string.pref_theme_key),getString(R.string.pref_theme_light_value)) == getString(R.string.pref_theme_light_value)){
-            Log.d("theme","light");
-            this.setTheme(R.style.AppTheme);
-        } else {
-            Log.d("theme","dark");
-            this.setTheme(R.style.TheMovieDbDark);
-        }
+        setTheme(getSharedPreferenceTheme(sharedPreferences));
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    public int getSharedPreferenceTheme(SharedPreferences sharedPreferences){
+        int theme = 0;
+        if(sharedPreferences.getString(getString(R.string.pref_theme_key),getString(R.string.pref_theme_light_value)) == getString(R.string.pref_theme_light_value)){
+            theme = R.style.AppTheme;
+        }
+        if(sharedPreferences.getString(getString(R.string.pref_theme_key),getString(R.string.pref_theme_light_value)) == getString(R.string.pref_theme_dark_value)){
+            theme = R.style.TheMovieDbDark;
+        }
+        return theme;
     }
 }
