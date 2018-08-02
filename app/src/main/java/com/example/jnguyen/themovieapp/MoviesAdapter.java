@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,14 @@ import com.squareup.picasso.Picasso;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdapterViewHolder> {
     private final Context mContext;
+    private final MoviesAdapterOnClickHandler mMoviesAdapterOnClickHandler;
     private ContentValues[] mContentValues;
 
-    public MoviesAdapter(Context context,ContentValues[] contentValues){
+    public MoviesAdapter(Context context,ContentValues[] contentValues,MoviesAdapterOnClickHandler moviesAdapterOnClickHandler){
         mContext = context;
         mContentValues = contentValues;
+        mMoviesAdapterOnClickHandler = moviesAdapterOnClickHandler;
+
     }
     @Override
     public MoviesAdapter.MoviesAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -43,7 +47,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         return mContentValues.length;
     }
 
-    public class MoviesAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class MoviesAdapterViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener{
         final TextView movieTitle;
         final TextView movieScore;
         final ImageView movieImage;
@@ -53,7 +57,19 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
             movieTitle = view.findViewById(R.id.tv_movieTitle);
             movieScore = view.findViewById(R.id.tv_movieScore);
             movieImage = view.findViewById(R.id.iv_movieImage);
+            view.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            ContentValues contentValues = mContentValues[position];
+            Log.d("click", Integer.toString(position));
+            mMoviesAdapterOnClickHandler.onClick(contentValues);
+        }
+    }
+
+    public interface MoviesAdapterOnClickHandler {
+        void onClick(ContentValues contentValues);
     }
 }

@@ -3,6 +3,7 @@ package com.example.jnguyen.themovieapp;
 import android.Manifest;
 import android.app.Application;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jnguyen.themovieapp.Utilities.NetworkUtils;
 import com.example.jnguyen.themovieapp.Utilities.PageManager;
@@ -35,7 +37,8 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ContentValues[]> ,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        SharedPreferences.OnSharedPreferenceChangeListener ,
+        MoviesAdapter.MoviesAdapterOnClickHandler{
 
     private static final int MOVIE_SEARCH_LOADER = 69;
     private static final String SEARCH_QUERY_URL_EXTRA = "query";
@@ -162,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 try {
                     URL url = new URL(searchQueryUrl);
+                    Log.d("url",searchQueryUrl);
                     String searchQueryResults = NetworkUtils.getResponseFromHttpUrl(url);
                     Log.d("json",searchQueryResults);
 
@@ -200,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements
             showErrorMessage();
         } else {
             moviesList = data;
-            mMoviesAdapter = new MoviesAdapter(this,moviesList);
+            mMoviesAdapter = new MoviesAdapter(this,moviesList,this);
             mMoviesList.setHasFixedSize(true);
             mMoviesList.setAdapter(mMoviesAdapter);
             hideErrorMessage();
@@ -244,6 +248,13 @@ public class MainActivity extends AppCompatActivity implements
             setupThemeSharedPreferences(sharedPreferences);
         }
         recreate();
+    }
+
+    @Override
+    public void onClick(ContentValues contentValues) {
+        Intent movieIntent = new Intent(MainActivity.this,MovieActivity.class);
+        movieIntent.putExtras(TheMovieDbJSONUtils.getMovieFromContentValue(contentValues));
+        startActivity(movieIntent);
     }
 }
 
