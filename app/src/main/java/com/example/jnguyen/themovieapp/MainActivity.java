@@ -14,6 +14,7 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -34,6 +35,8 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
+
+import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ContentValues[]> ,
@@ -204,8 +207,10 @@ public class MainActivity extends AppCompatActivity implements
             showErrorMessage();
         } else {
             moviesList = data;
+            Context context = this;
             mMoviesAdapter = new MoviesAdapter(this,moviesList,this);
-            mMoviesList.setHasFixedSize(true);
+//            mMoviesList.setHasFixedSize(true);
+            mMoviesList.addItemDecoration(new DividerItemDecoration(context,DividerItemDecoration.VERTICAL));
             mMoviesList.setAdapter(mMoviesAdapter);
             hideErrorMessage();
         }
