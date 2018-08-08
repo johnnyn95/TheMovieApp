@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -28,6 +29,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jnguyen.themovieapp.TheMovieDb.FavouriteMoviesContract;
+import com.example.jnguyen.themovieapp.TheMovieDb.FavouriteMoviesDbHelper;
 import com.example.jnguyen.themovieapp.Utilities.NetworkUtils;
 import com.example.jnguyen.themovieapp.Utilities.PageManager;
 import com.example.jnguyen.themovieapp.Utilities.TheMovieDbJSONUtils;
@@ -36,6 +39,8 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
+
+import javax.xml.datatype.Duration;
 
 import static java.security.AccessController.getContext;
 
@@ -70,8 +75,6 @@ public class MainActivity extends AppCompatActivity implements
         mErrorMessageDisplay = findViewById(R.id.tv_error_message_display);
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
         mMoviesList = findViewById(R.id.rv_movies_list);
-
-
 
         if(savedInstanceState != null){
             searchQueryUrl = savedInstanceState.getString(SEARCH_QUERY_URL_EXTRA);
@@ -175,10 +178,6 @@ public class MainActivity extends AppCompatActivity implements
 
                     try {
                         jsonResult = TheMovieDbJSONUtils.getMoviesContentValuesFromJson(searchQueryResults);
-
-                        //for (ContentValues value : contentValues){
-                        //    Log.d("movie", value.get("title").toString());
-                        //}
                     } catch (JSONException e){
 
                         e.printStackTrace();
@@ -261,6 +260,17 @@ public class MainActivity extends AppCompatActivity implements
         Intent movieIntent = new Intent(MainActivity.this,MovieActivity.class);
         movieIntent.putExtras(TheMovieDbJSONUtils.getMovieFromContentValue(contentValues));
         startActivity(movieIntent);
+    }
+
+    @Override
+    public void addToFavourites(ContentValues contentValues) {
+        Uri uri = getContentResolver().insert(FavouriteMoviesContract.CONTENT_URI,contentValues);
+        if(uri != null){
+        Toast toast = new Toast(this);
+        toast.makeText(this, R.string.added_to_favourites_message, Toast.LENGTH_SHORT).show();
+        Log.d("fav",uri.toString());
+        }
+
     }
 }
 

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,25 +52,36 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         final TextView movieTitle;
         final TextView movieScore;
         final ImageView movieImage;
+        final ImageButton movieFavourite;
 
         MoviesAdapterViewHolder(View view){
             super(view);
             movieTitle = view.findViewById(R.id.tv_movieTitle);
             movieScore = view.findViewById(R.id.tv_movieScore);
             movieImage = view.findViewById(R.id.iv_movieImage);
+            movieFavourite = view.findViewById(R.id.ib_favouriteMovie);
             view.setOnClickListener(this);
+            movieFavourite.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
             ContentValues contentValues = mContentValues[position];
-            Log.d("click", Integer.toString(position));
-            mMoviesAdapterOnClickHandler.onClick(contentValues);
+
+            if(v == movieFavourite){
+                Log.d("fav","fav");
+                mMoviesAdapterOnClickHandler.addToFavourites(contentValues);
+            }
+            else {
+                Log.d("click", Integer.toString(position));
+                mMoviesAdapterOnClickHandler.onClick(contentValues);
+            }
         }
     }
 
     public interface MoviesAdapterOnClickHandler {
         void onClick(ContentValues contentValues);
+        void addToFavourites(ContentValues contentValues);
     }
 }

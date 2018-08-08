@@ -101,6 +101,8 @@ public class TheMovieDbJSONUtils {
         bundle.putString(MOVIE_SCORE,contentValues.getAsString(MOVIE_SCORE));
         bundle.putString(POPULARITY,contentValues.getAsString(POPULARITY));
         bundle.putString(RELEASE_DATE,contentValues.getAsString(RELEASE_DATE));
+        bundle.putString(VOTE_COUNT,contentValues.getAsString(VOTE_COUNT));
+        bundle.putString(ADULT,contentValues.getAsString(ADULT));
 
         return bundle;
     }

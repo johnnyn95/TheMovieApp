@@ -12,6 +12,7 @@
     <string name="pref_theme_light_value">light</string>
 
     <string name="error_message">Sorry,no results found :(</string>
+    <string name="added_to_favourites_message">Movie Successfully added to favourites!</string>
     <string name="query_hint">Enter a movie Title</string>
     <string name="score">Score: </string>
 </resources>

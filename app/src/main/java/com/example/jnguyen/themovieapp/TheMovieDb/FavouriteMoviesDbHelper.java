@@ -8,7 +8,7 @@ import android.util.Log;
 public class FavouriteMoviesDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "favouriteMovies.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 5;
 
     public FavouriteMoviesDbHelper(Context context){
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
@@ -19,16 +19,17 @@ public class FavouriteMoviesDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_FAVOURITE_MOVIES_TABLE = "CREATE TABLE " +
                 FavouriteMoviesContract.TABLE_NAME + " (" +
                 FavouriteMoviesContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                FavouriteMoviesContract.COLUMN_TITLE + " TEXT NOT NULL, " +
-                FavouriteMoviesContract.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
-                FavouriteMoviesContract.COLUMN_SCORE + " REAL NOT NULL, " +
-                FavouriteMoviesContract.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
-                FavouriteMoviesContract.COLUMN_IMAGEPATH + " TEXT NOT NULL, " +
-                FavouriteMoviesContract.COLUMN_POPULARITY + " TEXT NOT NULL, " +
-                FavouriteMoviesContract.COLUMN_ADULT + " TEXT NOT NULL, " +
+                FavouriteMoviesContract.COLUMN_TITLE + " TEXT, " +
+                FavouriteMoviesContract.COLUMN_OVERVIEW + " TEXT, " +
+                FavouriteMoviesContract.COLUMN_SCORE + " TEXT, " +
+                FavouriteMoviesContract.COLUMN_VOTE_COUNT + " TEXT, " +
+                FavouriteMoviesContract.COLUMN_RELEASE_DATE + " TEXT, " +
+                FavouriteMoviesContract.COLUMN_IMAGEPATH + " TEXT, " +
+                FavouriteMoviesContract.COLUMN_POPULARITY + " TEXT, " +
+                FavouriteMoviesContract.COLUMN_ADULT + " TEXT, " +
                 FavouriteMoviesContract.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" + ");";
         Log.d("sqllite",SQL_CREATE_FAVOURITE_MOVIES_TABLE);
-        //TODO finish SQLite table creation
+        db.execSQL(SQL_CREATE_FAVOURITE_MOVIES_TABLE);
     }
 
     @Override
