@@ -2,6 +2,7 @@ package com.example.jnguyen.themovieapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         mMoviesAdapterOnClickHandler = moviesAdapterOnClickHandler;
 
     }
+
     @Override
     public MoviesAdapter.MoviesAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.movie_list_item,parent,false);

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/rv_background">
+
+    <TextView
+        android:id="@+id/fm_tv_movieTitle"
+        style="@style/Base.TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Movie Title"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/fv_iv_movieImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/fm_tv_movieTitle"
+        app:layout_constraintStart_toStartOf="@+id/fm_tv_movieTitle"
+        app:layout_constraintTop_toBottomOf="@+id/fm_tv_movieTitle"/>
+
+    <TextView
+        android:id="@+id/fm_tv_movieScore"
+        style="@style/Base.TextAppearance.AppCompat.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:text="5.7"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fv_iv_movieImage" />
+
+    <View
+        android:id="@+id/fm_botom_divider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorAccent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fm_tv_movieScore"
+        tools:layout_editor_absoluteX="16dp"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:id="@+id/fm_view"
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:background="@color/rv_divider"
+        app:layout_constraintTop_toBottomOf="@+id/fm_botom_divider" />
+
+    <ImageButton
+        android:id="@+id/fm_ib_removeMovie"
+        android:layout_width="60dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="2dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/fm_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@mipmap/delete" />
+</android.support.constraint.ConstraintLayout>

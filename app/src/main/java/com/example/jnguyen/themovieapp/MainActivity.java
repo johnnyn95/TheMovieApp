@@ -134,6 +134,11 @@ public class MainActivity extends AppCompatActivity implements
         startActivity(settingsIntent);
     }
 
+    public void launchFavouritesActivity(){
+        Intent settingsIntent = new Intent(this,FavouritesActivity.class);
+        startActivity(settingsIntent);
+    }
+
     private void hideErrorMessage() {
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
     }
@@ -236,6 +241,9 @@ public class MainActivity extends AppCompatActivity implements
                 return true;
             case R.id.action_settings :
                 launchSettingsActivity();
+                return true;
+            case R.id.action_favourites:
+                launchFavouritesActivity();
                 return true;
         }
         return super.onOptionsItemSelected(item);

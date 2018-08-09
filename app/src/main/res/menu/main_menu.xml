@@ -5,6 +5,12 @@
         android:id="@+id/action_search"
         android:title="@string/activity_search"
         app:showAsAction="always|collapseActionView" />
+
+    <item
+        android:id="@+id/action_favourites"
+        android:title="@string/activity_favourites"
+        app:showAsAction="always|collapseActionView" />
+
     <item
         android:id="@+id/action_settings"
         android:title="@string/activity_settings"
