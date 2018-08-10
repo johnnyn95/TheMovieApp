@@ -1,8 +1,10 @@
 package com.example.jnguyen.themovieapp;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -14,8 +16,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.jnguyen.themovieapp.TheMovieDb.FavouriteMoviesContract;
+import com.example.jnguyen.themovieapp.TheMovieDb.FavouriteMoviesDbHelper;
+import com.example.jnguyen.themovieapp.Utilities.TheMovieDbJSONUtils;
 
 public class FavouritesActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> ,
@@ -72,16 +77,28 @@ public class FavouritesActivity extends AppCompatActivity implements
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-
+        mAdapter.swapCursor(null);
     }
 
     @Override
     public void onClick(ContentValues contentValues) {
-
+        Intent movieIntent = new Intent(FavouritesActivity.this,MovieActivity.class);
+        movieIntent.putExtras(TheMovieDbJSONUtils.getMovieFromContentValue(contentValues));
+        startActivity(movieIntent);
     }
 
     @Override
-    public void removeFromFavourites(ContentValues contentValues) {
+    public void removeFromFavourites(String title) {
+        Log.d("cusUri",FavouriteMoviesContract.MOVIE_URI.toString());
+
+        int rowsDeleted = getContentResolver().delete(FavouriteMoviesContract.MOVIE_URI ,FavouriteMoviesContract.COLUMN_TITLE+" = '"+title+"';",null);
+
+//        if(rowsDeleted != 0){
+            Toast toast = new Toast(this);
+            toast.makeText(this, R.string.removed_from_favourites_message, Toast.LENGTH_SHORT).show();
+//        }
+
+        getSupportLoaderManager().restartLoader(FAVOURITE_MOVIES_LOADER,null,this);
 
     }
 }

@@ -37,4 +37,10 @@ public class FavouriteMoviesDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + FavouriteMoviesContract.TABLE_NAME);
         onCreate(db);
     }
+//
+//    public static String deleteCertainRow(int rowId){
+//        String SQL_DELETE_CERTAIN_ROW = "DELETE FROM " + FavouriteMoviesContract.TABLE_NAME + " WHERE " + FavouriteMoviesContract._ID  +"= " + rowId + ";";
+//        Log.d("del",SQL_DELETE_CERTAIN_ROW);
+//        return SQL_DELETE_CERTAIN_ROW;
+//    }
 }

@@ -87,7 +87,22 @@ public class MovieProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        int numRowsDeleted;
+        if(selection == null){ selection = "1"; }
+
+        switch (sUriMatcher.match(uri)){
+            case CODE_ALL_MOVIES:
+                numRowsDeleted = mFavouriteMoviesDbHelper.getWritableDatabase()
+                        .delete(FavouriteMoviesContract.TABLE_NAME,selection,selectionArgs);
+            break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri:" + uri);
+        }
+
+        if (numRowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return numRowsDeleted;
     }
 
     @Override

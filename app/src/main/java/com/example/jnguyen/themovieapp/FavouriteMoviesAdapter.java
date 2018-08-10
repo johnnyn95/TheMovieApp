@@ -2,9 +2,11 @@ package com.example.jnguyen.themovieapp;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.jnguyen.themovieapp.TheMovieDb.FavouriteMoviesContract;
 import com.example.jnguyen.themovieapp.Utilities.NetworkUtils;
 import com.example.jnguyen.themovieapp.Utilities.TheMovieDbJSONUtils;
 import com.squareup.picasso.Picasso;
@@ -20,7 +23,7 @@ public class FavouriteMoviesAdapter extends
         RecyclerView.Adapter<FavouriteMoviesAdapter.FavouriteMoviesAdapterViewHolder> {
 
     private final Context mContext;
-    private final Cursor mCursor;
+    private Cursor mCursor;
     FavouriteMoviesAdapterOnClickHandler mFavouriteMoviesAdapterOnClickHandler;
 
     public FavouriteMoviesAdapter(Context context, Cursor cursor, FavouriteMoviesAdapterOnClickHandler handler){
@@ -71,21 +74,37 @@ public class FavouriteMoviesAdapter extends
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-//            ContentValues contentValues = mContentValues[position];
-//
-//            if(v == movieFavourite){
-//                Log.d("fav","fav");
-//                mFavouriteMoviesAdapterOnClickHandler.removeFromFavourites(contentValues);
-//            }
-//            else {
-//                Log.d("click", Integer.toString(position));
-//                mFavouriteMoviesAdapterOnClickHandler.onClick(contentValues);
-//            }
+            ContentValues contentValues = new ContentValues();
+            DatabaseUtils.cursorRowToContentValues(mCursor,contentValues);
+
+            if(v == movieFavourite){
+                mCursor.moveToPosition(position);
+                String title = mCursor.getString(mCursor.getColumnIndex(FavouriteMoviesContract.COLUMN_TITLE));
+
+                Log.d("delete",title);
+                mFavouriteMoviesAdapterOnClickHandler.removeFromFavourites(title);
+            }
+            else {
+                Log.d("click", Integer.toString(position));
+                mFavouriteMoviesAdapterOnClickHandler.onClick(contentValues);
+            }
         }
+    }
+
+    public Cursor swapCursor(Cursor c){
+        if(mCursor == c){
+            return null;
+        }
+        Cursor temp = mCursor;
+        this.mCursor = c;
+        if(c != null){
+            this.notifyDataSetChanged();
+        }
+        return temp;
     }
 
     public interface FavouriteMoviesAdapterOnClickHandler {
         void onClick(ContentValues contentValues);
-        void removeFromFavourites(ContentValues contentValues);
+        void removeFromFavourites(String title);
     }
 }

@@ -13,6 +13,10 @@ public class FavouriteMoviesContract implements BaseColumns {
             .appendPath(PATH_FAVOURITE_MOVIES)
             .build();
 
+    public static final Uri MOVIE_URI = BASE_CONTENT_URI.buildUpon()
+            .appendPath(PATH_FAVOURITE_MOVIES)
+            .appendEncodedPath("")
+            .build();
 
     public static final String TABLE_NAME = "favouriteMovies";
     public static final String COLUMN_TITLE = "title";

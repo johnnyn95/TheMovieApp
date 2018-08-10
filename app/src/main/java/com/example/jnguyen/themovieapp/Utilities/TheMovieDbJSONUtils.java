@@ -48,6 +48,9 @@ public class TheMovieDbJSONUtils {
     public static String getMovieReleaseDateKey(){
         return RELEASE_DATE;
     }
+    public static String getMovieIdKey(){
+        return "_ID";
+    }
 
 
     public static ContentValues[] getMoviesContentValuesFromJson(String jsonResult)
