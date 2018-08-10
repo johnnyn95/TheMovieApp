@@ -14,5 +14,6 @@
     <color name="secondaryTextColor">#ffffff</color>
 
     <color name="rv_background">#D3D3D3</color>
-    <color name="rv_divider">#EEEEEE</color>
+    <!--<color name="rv_divider">#EEEEEE</color>-->
+    <color name="rv_divider">#FAFAFA</color>
 </resources>
