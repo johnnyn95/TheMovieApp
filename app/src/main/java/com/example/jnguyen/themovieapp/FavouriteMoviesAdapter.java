@@ -43,11 +43,15 @@ public class FavouriteMoviesAdapter extends
     public void onBindViewHolder(@NonNull FavouriteMoviesAdapterViewHolder holder, int position) {
         mCursor.moveToPosition(position);
         holder.movieTitle.setText(mCursor.getString(mCursor.getColumnIndex(TheMovieDbJSONUtils.getMovieTitleKey())));
-        holder.movieScore.setText("Score: " + mCursor.getString(mCursor.getColumnIndex(TheMovieDbJSONUtils.getMovieScoreKey())));
+        holder.movieScore.setText(mCursor.getString(mCursor.getColumnIndex(TheMovieDbJSONUtils.getMovieScoreKey())));
         String imagePath = mCursor.getString(mCursor.getColumnIndex(TheMovieDbJSONUtils.getMovieImagePathKey()));
+        boolean adult = Boolean.getBoolean(mCursor.getString(mCursor.getColumnIndex(TheMovieDbJSONUtils.getMovieAdultKey())));
         Uri imgUri = NetworkUtils.buildImageUri(imagePath);
+        Double popularity = Double.valueOf(mCursor.getString((mCursor.getColumnIndex(TheMovieDbJSONUtils.getMoviePopularityKey()))));
         Picasso.get().load(imgUri).into(holder.movieImage);
-
+        if(popularity > 15){
+            holder.movieTrending.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -60,6 +64,7 @@ public class FavouriteMoviesAdapter extends
         final TextView movieScore;
         final ImageView movieImage;
         final ImageButton movieFavourite;
+        final ImageView movieTrending;
 
         FavouriteMoviesAdapterViewHolder(View view){
             super(view);
@@ -67,6 +72,7 @@ public class FavouriteMoviesAdapter extends
             movieScore = view.findViewById(R.id.fm_tv_movieScore);
             movieImage = view.findViewById(R.id.fv_iv_movieImage);
             movieFavourite = view.findViewById(R.id.fm_ib_removeMovie);
+            movieTrending = view.findViewById(R.id.fm_iv_trending);
             view.setOnClickListener(this);
             movieFavourite.setOnClickListener(this);
         }
@@ -75,17 +81,14 @@ public class FavouriteMoviesAdapter extends
         public void onClick(View v) {
             int position = getAdapterPosition();
             ContentValues contentValues = new ContentValues();
+            mCursor.moveToPosition(position);
             DatabaseUtils.cursorRowToContentValues(mCursor,contentValues);
 
             if(v == movieFavourite){
-                mCursor.moveToPosition(position);
                 String title = mCursor.getString(mCursor.getColumnIndex(FavouriteMoviesContract.COLUMN_TITLE));
-
-                Log.d("delete",title);
                 mFavouriteMoviesAdapterOnClickHandler.removeFromFavourites(title);
             }
             else {
-                Log.d("click", Integer.toString(position));
                 mFavouriteMoviesAdapterOnClickHandler.onClick(contentValues);
             }
         }

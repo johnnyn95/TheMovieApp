@@ -273,6 +273,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void addToFavourites(ContentValues contentValues) {
         Uri uri = getContentResolver().insert(FavouriteMoviesContract.CONTENT_URI,contentValues);
+        Log.d("checkadult",contentValues.getAsString(TheMovieDbJSONUtils.getMovieAdultKey()));
         if(uri != null){
         Toast toast = new Toast(this);
         toast.makeText(this, R.string.added_to_favourites_message, Toast.LENGTH_SHORT).show();

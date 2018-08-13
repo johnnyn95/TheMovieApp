@@ -37,23 +37,49 @@
         app:layout_constraintStart_toStartOf="@+id/fm_tv_movieTitle"
         app:layout_constraintTop_toBottomOf="@+id/fm_tv_movieTitle"/>
 
-    <TextView
-        android:id="@+id/fm_tv_movieScore"
-        style="@style/Base.TextAppearance.AppCompat.Large"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/fm_score_ConstraintLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="5.7"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/fm_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fv_iv_movieImage" />
+        app:layout_constraintTop_toBottomOf="@+id/fv_iv_movieImage"
+        app:layout_constraintVertical_bias="1.0">
+
+        <TextView
+            android:id="@+id/fm_tv_Score"
+            style="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:text="@string/score"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <TextView
+            android:id="@+id/fm_tv_movieScore"
+            style="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:text="5.7"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fm_tv_Score" />
+    </android.support.constraint.ConstraintLayout>
+
 
     <View
         android:id="@+id/fm_botom_divider"
@@ -65,7 +91,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fm_tv_movieScore"
+        app:layout_constraintTop_toBottomOf="@+id/fm_score_ConstraintLayout"
         tools:layout_editor_absoluteX="16dp"
         tools:ignore="MissingConstraints" />
 
@@ -85,4 +111,19 @@
         app:layout_constraintBottom_toTopOf="@+id/fm_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@mipmap/delete" />
+
+    <ImageView
+        android:id="@+id/fm_iv_trending"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/fm_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@mipmap/fire"
+        tools:ignore="MissingConstraints" />
+
+
 </android.support.constraint.ConstraintLayout>

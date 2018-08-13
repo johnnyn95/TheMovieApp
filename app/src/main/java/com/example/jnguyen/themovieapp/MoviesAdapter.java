@@ -39,10 +39,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     @Override
     public void onBindViewHolder(@NonNull MoviesAdapter.MoviesAdapterViewHolder holder, int position) {
         holder.movieTitle.setText(mContentValues[position].get(TheMovieDbJSONUtils.getMovieTitleKey()).toString());
-        holder.movieScore.setText("Score: " + mContentValues[position].get(TheMovieDbJSONUtils.getMovieScoreKey()).toString());
+        holder.movieScore.setText(mContentValues[position].get(TheMovieDbJSONUtils.getMovieScoreKey()).toString());
         String imagePath = mContentValues[position].get(TheMovieDbJSONUtils.getMovieImagePathKey()).toString();
         Uri imgUri = NetworkUtils.buildImageUri(imagePath);
         Picasso.get().load(imgUri).into(holder.movieImage);
+        Double popularity = Double.valueOf(mContentValues[position].getAsString(TheMovieDbJSONUtils.getMoviePopularityKey()));
+        if(popularity > 15){
+            holder.movieTrending.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -55,6 +59,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         final TextView movieScore;
         final ImageView movieImage;
         final ImageButton movieFavourite;
+        final ImageView movieTrending;
 
         MoviesAdapterViewHolder(View view){
             super(view);
@@ -62,6 +67,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
             movieScore = view.findViewById(R.id.tv_movieScore);
             movieImage = view.findViewById(R.id.iv_movieImage);
             movieFavourite = view.findViewById(R.id.ib_favouriteMovie);
+            movieTrending = view.findViewById(R.id.iv_trending);
             view.setOnClickListener(this);
             movieFavourite.setOnClickListener(this);
         }
